@@ -11,6 +11,9 @@
 		707762751B989D6B00717B49 /* ProtocolTester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7077626A1B989D6A00717B49 /* ProtocolTester.framework */; settings = {ASSET_TAGS = (); }; };
 		7077627A1B989D6B00717B49 /* CollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707762791B989D6B00717B49 /* CollectionType.swift */; };
 		707762851B989D8D00717B49 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707762841B989D8D00717B49 /* Array.swift */; settings = {ASSET_TAGS = (); }; };
+		707762871B98A2BE00717B49 /* MutableCollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707762861B98A2BE00717B49 /* MutableCollectionType.swift */; settings = {ASSET_TAGS = (); }; };
+		707762891B98A47600717B49 /* MutableSliceable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707762881B98A47600717B49 /* MutableSliceable.swift */; settings = {ASSET_TAGS = (); }; };
+		7077628B1B98A66900717B49 /* RangeReplaceableCollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7077628A1B98A66900717B49 /* RangeReplaceableCollectionType.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +34,9 @@
 		707762791B989D6B00717B49 /* CollectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionType.swift; sourceTree = "<group>"; };
 		7077627B1B989D6B00717B49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		707762841B989D8D00717B49 /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		707762861B98A2BE00717B49 /* MutableCollectionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutableCollectionType.swift; sourceTree = "<group>"; };
+		707762881B98A47600717B49 /* MutableSliceable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutableSliceable.swift; sourceTree = "<group>"; };
+		7077628A1B98A66900717B49 /* RangeReplaceableCollectionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeReplaceableCollectionType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +89,9 @@
 			isa = PBXGroup;
 			children = (
 				707762791B989D6B00717B49 /* CollectionType.swift */,
+				707762861B98A2BE00717B49 /* MutableCollectionType.swift */,
+				707762881B98A47600717B49 /* MutableSliceable.swift */,
+				7077628A1B98A66900717B49 /* RangeReplaceableCollectionType.swift */,
 				707762841B989D8D00717B49 /* Array.swift */,
 				7077627B1B989D6B00717B49 /* Info.plist */,
 			);
@@ -204,7 +213,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7077627A1B989D6B00717B49 /* CollectionType.swift in Sources */,
+				7077628B1B98A66900717B49 /* RangeReplaceableCollectionType.swift in Sources */,
+				707762871B98A2BE00717B49 /* MutableCollectionType.swift in Sources */,
 				707762851B989D8D00717B49 /* Array.swift in Sources */,
+				707762891B98A47600717B49 /* MutableSliceable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,6 +392,7 @@
 				707762801B989D6B00717B49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		707762811B989D6B00717B49 /* Build configuration list for PBXNativeTarget "ProtocolTesterTests" */ = {
 			isa = XCConfigurationList;
@@ -388,6 +401,7 @@
 				707762831B989D6B00717B49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

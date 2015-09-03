@@ -1,5 +1,12 @@
+/// Conforming CollectionTypes can be initialized from a SequenceType
+
 protocol FlexibleInitable : CollectionType {
   init<S : SequenceType where S.Generator.Element == Generator.Element>(_ s: S)
+  var invariantPassed: Bool { get }
+}
+
+extension FlexibleInitable {
+  var invariantPassed: Bool { return true }
 }
 
 extension Array           : FlexibleInitable {}
@@ -17,7 +24,7 @@ extension Dictionary      : FlexibleInitable {
 import XCTest
 import Foundation
 
-private func randArs() -> [[Int]] {
+internal func randArs() -> [[Int]] {
   return (0..<10).map { n in
     (0..<n).map { _ in Int(arc4random_uniform(100000)) }
   }
@@ -25,23 +32,21 @@ private func randArs() -> [[Int]] {
 
 extension FlexibleInitable where Generator.Element == Int {
   static func test() {
-    testEmptyInit()
     testMultiPass()
   }
-  static private func testEmptyInit() {
-    let emptyArray: [Int] = []
-    let emptySelf = Self(emptyArray)
-    XCTAssert(emptySelf.isEmpty, "\nSelf initialized to empty was not empty. Contents were: \(Array(emptySelf))")
-  }
-  static private func testMultiPass() {
+  static internal func testMultiPass() {
     for randAr in randArs() {
       let seq = Self(randAr)
       let first = Array(seq)
       let secnd = Array(seq)
       XCTAssert(first.elementsEqual(secnd), "\nFirst pass over self did not equal second pass over self\nFirst pass: \(first)\nSecond pass: \(secnd)")
+      XCTAssert(seq.invariantPassed, "Invariant broken: \(Array(seq))")
     }
   }
 }
+
+/// Conforming CollectionTypes have the same number of unique elements as the sequence
+/// they were initialized from.
 
 protocol SameNumberUniques : FlexibleInitable {}
 
@@ -53,26 +58,30 @@ extension Dictionary      : SameNumberUniques {}
 
 extension SameNumberUniques where Generator.Element == Int {
   static func test() {
-    testEmptyInit()
     testMultiPass()
     testCount()
     testSeqInit()
   }
-  static private func testCount() {
+  static internal func testCount() {
     for randSet in randArs().map(Set.init) {
       let seq = Self(randSet)
       XCTAssertEqual(randSet.count, Array(seq).count, "Did not contain the same number of elements as the unique collection of elements self was initialized to.\nUnique elements: \(randSet)\nSelf: \(Array(seq))")
+      XCTAssert(seq.invariantPassed, "Invariant broken: \(Array(seq))")
     }
   }
-  static private func testSeqInit() {
+  static internal func testSeqInit() {
     for randSet in randArs().map(Set.init) {
       let seq = Self(randSet)
       let expectation = randSet.sort()
       let reality     = seq.sort()
       XCTAssert(expectation.elementsEqual(reality), "Self did not contain the same elements as the set it was initialized from.\nSet: \(expectation)\nSelf: \(reality)")
+      XCTAssert(seq.invariantPassed, "Invariant broken: \(Array(seq))")
     }
   }
 }
+
+/// Confomring CollectionTypes have the same elements, in the same order, as the
+/// SequenceType they were initialized from.
 
 protocol SameOrder : SameNumberUniques {}
 
@@ -82,7 +91,6 @@ extension ContiguousArray : SameOrder {}
 
 extension SameOrder where Generator.Element == Int, SubSequence.Generator.Element == Int {
   static func test() {
-    testEmptyInit()
     testMultiPass()
     testCount()
     testSeqInit()
@@ -92,27 +100,30 @@ extension SameOrder where Generator.Element == Int, SubSequence.Generator.Elemen
     testRangeIndexing()
     testSplit()
   }
-  static private func testSameEls() {
+  static internal func testSameEls() {
     for randAr in randArs() {
       let seq = Self(randAr)
       XCTAssert(randAr.elementsEqual(seq), "Did not contain the same elements as the array self was initialized from.\nArray: \(randAr)\nSelf: \(seq)")
+      XCTAssert(seq.invariantPassed, "Invariant broken: \(Array(seq))")
     }
   }
-  static private func testIndexing() {
+  static internal func testIndexing() {
     for randAr in randArs() {
       let seq = Self(randAr)
       for (iA, iS) in zip(randAr.indices, seq.indices) {
         XCTAssertEqual(randAr[iA], seq[iS], "Did not have correct element at index. \nExpected: \(randAr[iA])\nFound: \(seq[iS])\nFrom array: \(randAr)")
       }
+      XCTAssert(seq.invariantPassed, "Invariant broken: \(Array(seq))")
     }
   }
-  static private func testFirst() {
+  static internal func testFirst() {
     for randAr in randArs() {
       let seq = Self(randAr)
       XCTAssert(seq.first == randAr.first, "first property did non return as expected.\nExpected: \(randAr.first)\nReceived: \(seq.first)\nFrom array: \(randAr)")
+      XCTAssert(seq.invariantPassed, "Invariant broken: \(Array(seq))")
     }
   }
-  static private func testRangeIndexing() {
+  static internal func testRangeIndexing() {
     for randAr in randArs() {
       let seq = Self(randAr)
       for (iA, iS) in zip(randAr.indices, seq.indices) {
@@ -120,17 +131,19 @@ extension SameOrder where Generator.Element == Int, SubSequence.Generator.Elemen
           let arSlice  = randAr[iA...jA]
           let seqSlice = seq[iS...jS]
           XCTAssert(arSlice.elementsEqual(seqSlice), "Slice did not match corresponding array slice.\nExpected: \(arSlice)\nReceived: \(seqSlice)\nFrom array: \(randAr)")
+          XCTAssert(seq.invariantPassed, "Invariant broken: \(Array(seq))")
         }
       }
     }
   }
-  static private func testSplit() {
+  static internal func testSplit() {
     for randAr in randArs() {
       let seq = Self(randAr)
+      XCTAssert(seq.invariantPassed, "Invariant broken: \(Array(seq))")
       for maxSplit in randAr.indices {
         for allow in [true, false] {
           let splitFuncs: [Int -> Bool] = (0..<5).map { _ in
-            let n = Int(arc4random_uniform(10))
+            let n = Int(arc4random_uniform(10) + 1)
             let splitFunc: Int -> Bool = { i in i % n == 0 }
             return splitFunc
           }
